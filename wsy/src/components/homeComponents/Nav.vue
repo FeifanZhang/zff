@@ -1,6 +1,6 @@
 <template>
 	<keep-alive>
-		<div class="Nav" v-show="pageStatus == 1">
+		<div class="Nav">
 			<div class="NavButtons">
 				<h1>HomePage</h1>
 				<div><input type="submit" name="" value="照    片" @click="toPhoto"></div>
@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
 import Photos from './Photos.vue';
 import Anniversary from './Anniversary.vue';
 import Clock from './Clock.vue'
@@ -63,17 +62,20 @@ moment.locale('zh-cn');
 			setInterval(()=>{this.setClock()}, 10000)
 		},
 		computed:{
-			...mapState(['pageStatus'])
+			token(){
+				// $route所拿到的路由是目前正活跃的路由
+				// $router是获取路由列表内所有的路由
+				// params.后面跟的参数要和router.js 设置的路由参数一样
+				return this.$route.query.token
+			}
 		},
 		methods:{
-			...mapState(['increase', 'decrease']),
 			setClock:function(){
 				this.piggyTime = moment().tz("Asia/Shanghai");
 				this.myTime = moment().tz("America/Chicago");
-				console.log(this.myTime)
 			},
 			returnToLogin:function(){
-				this.$store.commit('decrease');
+				this.$router.replace('/login');
 				this.toClock();
 			},
 			toPhoto:function(){
@@ -139,7 +141,7 @@ moment.locale('zh-cn');
 		margin-right: 10vw;
 		background-color: rgba(0,0,0, 0);
 		border: none;
-		transform: 0.25s;
+		transition: 0.25s;
 	}
 	.NavButtons input[type = "submit"]:hover{
 		/*background: #FFFFFFFF;*/

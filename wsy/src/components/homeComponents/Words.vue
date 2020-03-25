@@ -25,8 +25,8 @@
 </template>
 
 <script>
-	import {mapState, mapGetters} from "vuex";
-	import axios from "axios"
+	//import {mapState} from "vuex";
+	//import axios from "axios"
 	let moment = require("moment");
 	moment.locale('zh-cn');
 	export default {
@@ -39,7 +39,7 @@
 			}
 		},
 		computed:{
-			...mapGetters(["get_token"]),	
+			//...mapGetters(["get_token"]),
 		},
 		methods: {
 

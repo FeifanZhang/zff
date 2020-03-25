@@ -1,23 +1,20 @@
 <template>
   <div id="app">
-	<StarBackground></StarBackground>
-	<Login></Login>
-	<Nav></Nav>
+	<star-background></star-background>
+	<router-view></router-view>
   </div>
 </template>
 
 <script>
-import StarBackground from './components/StarBackground.vue'
-import Login from './components/Login.vue'
-import Nav from './components/homeComponents/Nav.vue'
-export default {
-  name: 'App',
-  components: {
-	StarBackground,
-	Login,
-	Nav,
-  },
-  
+	import Vue from 'vue'
+	import VueRouter from 'vue-router'
+	Vue.use(VueRouter);
+	import StarBackground from './components/StarBackground.vue'
+	export default {
+		name: 'App',
+		components: {
+			StarBackground,
+		},
 }
 </script>
 

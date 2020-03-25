@@ -1,8 +1,8 @@
 <template>
-	<div v-show="pageStatus == 0">
+	<div>
 		<keep-alive>
 			<form class="Login" v-show="!showPop" @submit.prevent="login">
-				<h1>Login</h1>
+				<h1>没奖竞猜</h1>
 				<input type="yourbirth" v-model="yourbirth" name="" placeholder="你的生日是什么时候?">
 				<input type="mybirth" v-model="mybirth" name="" placeholder="我的生日是什么时候?">
 				<input type="submit" name="" value="Login">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+//import {mapState} from "vuex";
 import axios from "axios"
 	export default {
 		name: 'Login',
@@ -22,24 +22,20 @@ import axios from "axios"
 				yourbirth: "",
 				birthy: "19960115",
 				mybirth: "",
-				birthm: "19970329",
 				showPop: false,
 				popMsg: "",
-				token: ""
 			}
 		},
 		computed:{
-			...mapState(['pageStatus'])
 		},
 		onLoad() {
 	
 		},
 		methods: {
-			...mapState(["increase", "decrease"]),
 			login:function(){
 				if (this.yourbirth != this.birthy){
 					this.popMsg = "啥？咋连自己的生日也忘啦？";
-					this.showPop = true
+					this.showPop = true;
 				}else{
 					axios({
 						url: 'http://127.0.0.1:8000/api/login/confirmAuth/',
@@ -49,14 +45,13 @@ import axios from "axios"
 						},
 						data: {
 							"username": this.yourbirth,
-							"password": this.mybirth
+							"password": this.mybirth,
 						}
 					}).then(res =>{
 						console.log(res.status);
 						if (res.status == 200){
-							this.token = res.data.token;
-							this.$store.commit('increase', this.token);
-
+							this.$router.replace({path: '/homepage', query: {token: res.data.token}})
+							//this.$router.replace("/homepage/"+res.data.token);
 						}
 					}).catch(res => {
 						console.log(res);
@@ -109,7 +104,6 @@ import axios from "axios"
 	}
 	/*inputs*/
 	.Login input[type = "mybirth"], .Login input[type = "yourbirth"]{
-		border: 0;
 		background: rgba(0,0,0, .4);
 		display: block;
 		margin: 20px auto;
@@ -124,7 +118,6 @@ import axios from "axios"
 	}
 	/*submit*/
 	.Login input[type = "submit"]{
-		border: 0;
 		background: rgba(0,0,0, .4);
 		display: block;
 		margin: 20px auto;
