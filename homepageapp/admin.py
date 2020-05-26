@@ -8,7 +8,7 @@ class MyWord(admin.ModelAdmin):
 
 
 class MyPhoto(admin.ModelAdmin):
-    list_display = ('date_created', 'description', 'is_delete')
+    list_display = ('date_created', 'info', 'is_delete', 'src')
 
 
 admin.site.register(Word, MyWord)

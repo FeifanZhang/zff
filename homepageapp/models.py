@@ -7,6 +7,14 @@ class WordManager(models.Manager):
     def show(self, *args, **kwargs):
         return Word.objects.filter(is_delete=False)
 
+    def insert(self, *args, **kwargs):
+        if not Word.objects.filter(word=kwargs['word']):
+            word_save = Word.objects.create(owner=kwargs['owner'], word=kwargs['word'])
+            return word_save
+        else:
+            raise ValueError({'error': 'this word has been exist'})
+
+
 
 class Word(models.Model):
     # owner = (('wsy', "魏疏影"), ('zff', "张非凡"))
@@ -19,27 +27,20 @@ class Word(models.Model):
 
 
 class PhotoManager(models.Manager):
-    def display_list(self):
-        return super().all.filter(is_delete=False)
+    def show(self):
+        return Photo.objects.filter(is_delete=False)
 
     def create_photo(self, *args, **kwargs):
-        photo = self.model()
-        photo.name = kwargs["name"]
-        photo.description = kwargs["description"]
-        photo.save()
+        photo = Photo.objects.create(info=kwargs['info'], src=kwargs['src'])
         return photo
 
 
 class Photo(models.Model):
-    name = models.CharField("name", max_length=128, unique=True, default="1")
+    info = models.CharField("info", max_length=128, unique=True, default="1")
     date_created = models.DateTimeField("date_created", default=timezone.now)
-    # img = models.ImageField(upload_to='photos/')
-    description = models.CharField("description", max_length=128, default="")
+    src = models.ImageField(upload_to='photos', null=True)
     is_delete = models.BooleanField("is_delete", default=False)
     objects = PhotoManager()
 
 
-if __name__ == '__main__':
-    Word.objects.create(owner=True, word='AAAAAA')
-    Word.objects.create(owner=True, word='BBBBBB')
-    Word.objects.create(owner=True, word='CCCCCCC')
+

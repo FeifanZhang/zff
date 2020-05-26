@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Anniversary from "./components/homeComponents/Anniversary";
-import Clock from "./components/homeComponents/Clock";
-import Photos from "./components/homeComponents/Photos";
-import Words from "./components/homeComponents/Words";
 Vue.use(VueRouter);
+
+
+const routerPush = VueRouter.prototype.replace;
+VueRouter.prototype.replace = function replace(location) {
+    return routerPush.call(this, location).catch(error => error);
+};
+
+
 const routes=[
     //单个路由均为对象类型，path代表的是路径，component代表组件
     //特殊情况的代码写在最开始，如果写在最后，后期可能会在后面加代码，特殊情况的代码就难找到了
@@ -15,28 +19,34 @@ const routes=[
     {
         path:'/homepage',
         component:() => import('./components/homeComponents/Nav.vue'),
-        child:[
+        meta: {
+          title: '主页'
+        },
+        children:[
             {
                 path: 'anniversary',
-                component: Anniversary
+                component:() => import('./components/homeComponents/Anniversary.vue')
             },
             {
                 path: 'clock',
-                component: Clock
+                component:() => import('./components/homeComponents/Clock.vue')
             },
             {
                 path: 'photos',
-                component: Photos
+                component: () => import('./components/homeComponents/Photos.vue')
             },
             {
                 path: 'words',
-                component: Words
+                component: () => import('./components/homeComponents/Words.vue')
             },
         ]
     },
     {
         path:'/login',
-        component:() => import('./components/Login.vue')
+        component:() => import('./components/Login.vue'),
+        meta: {
+            title: '登录一哈'
+        },
     },
 
 ];

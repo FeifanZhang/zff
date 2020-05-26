@@ -19,7 +19,7 @@ class TokenManager(models.Manager):
             else:
                 token.save()  # token里的时间属性带有auto_now字段，通过save可以激活时间属性自动更新时间
         except Exception as e:
-            raise exceptions.AuthenticationFailed(e.args)
+            raise exceptions.AuthenticationFailed({'error': e.args})
         return token
 
 

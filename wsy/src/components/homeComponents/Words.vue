@@ -1,51 +1,57 @@
 <template>
 	<div class="Words">
 		<div class="ShowWords">
-			<h2>AAAAAAA</h2>
-			<h2>SSSSSSSS</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
-			<h2>DDDDDDDD</h2>
+			<h2 v-for="word in this.words" :key="word.id">{{word.word}}</h2>
 		</div>
-		<form class="InputWords">
-			<textarea id="inputBar" placeholder="想说什么就往里面写吧!"></textarea>
-			<input id="send" type="submit" value="发送"/>
-		</form>
+		<textarea id="inputBar" v-model="this.word_insert" @keydown.enter="this.postWord" placeholder="想说什么就往里面写吧!"></textarea>
 	</div>
 </template>
 
 <script>
 	//import {mapState} from "vuex";
-	//import axios from "axios"
+	import {wordRequest} from "../../request.js";
 	let moment = require("moment");
 	moment.locale('zh-cn');
 	export default {
 		name: 'Words',
 		data(){
 			return{
-				words:{
-
-				}
+				token: '',
+				words: [],
+				word_insert: '',
 			}
 		},
-		computed:{
-			//...mapGetters(["get_token"]),
-		},
 		methods: {
-
+			postWord(){
+				wordRequest({
+					method: 'post',
+					data:{
+						owner: true,
+						word: this.word_insert,
+					}
+				}).then(res=>{
+					this.words.push({id:res.data.id, owner: res.data.owner, date_created: res.data.date_created, word: res.data.word})
+				}).catch(res=>{
+					console.log(res)
+				})
+			},
 		},
 		created() {
-			
+			if (this.$route.query.token === undefined){
+				this.$router.replace({path:'/login'})
+			}else{
+				this.token = this.$route.query.token;
+				wordRequest({
+					method: 'get',
+					params: {
+						token: this.token
+					}
+				}).then(res =>{
+					this.words = res.data.words
+				}).catch(res => {
+					console.log(res);
+				})
+			}
 		}
 	}
 
@@ -62,34 +68,16 @@
 		overflow: auto;
 		margin-bottom: 3vh;
 	}
-	.InputWords{
-		width: 90%;
-		height: 10%;
-	}
-	.InputWords #inputBar{
+
+	#inputBar{
 		width: 80%;
 		font-size: 3vh;
-		height: 50%;
+		height: 5%;
 		background-color: rgba(0, 0, 0, .2);
 		border-radius: 20px;
 		margin-left: 3vw;
 		float: left;
 		overflow: hidden;
 		color: white;
-	}
-	.InputWords #send{
-		border: 0;
-		background: rgba(0,0,0, .4);
-		display: block;
-		width: 10%;
-		padding-top: 1%;
-		padding-bottom: 1%;
-		font-size: 2vh;
-		text-align: center;
-		outline: none;
-		color: white;
-		border-radius: 24px;
-		transition: 0.25s;
-		float: right;
 	}
 </style>

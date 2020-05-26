@@ -22,14 +22,6 @@ class LoginView(APIView):
     # 局部取消认证
     authentication_classes = []
 
-    # def options(self, request, *args, **kwargs):
-    #     res = HttpResponse()
-    #     res["Access-Control-Allow-Origin"] = "*"
-    #     res["Access-Control-Allow-Methods"] = "*"
-    #     res["Access-Control-Allow-Headers"] = "Content-Type"
-    #     res["Access-Control-Allow-Credentials"] = "true"
-    #     return res
-
     def post(self, request, *args, **kwargs):
         try:
             username = request.data['username']

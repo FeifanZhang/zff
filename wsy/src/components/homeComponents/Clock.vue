@@ -25,9 +25,6 @@ moment.locale('zh-cn');
 			this.clock();
 			setInterval(()=>{this.clock()}, 10000)
 		},
-		onLoad() {
-	
-		},
 		methods:{
 			clock:function(){
 				this.days = moment().tz("Asia/Shanghai").diff(moment("20180304"), "days");

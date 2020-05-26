@@ -30,9 +30,6 @@ moment.locale('zh-cn');
 			this.setAnniversary();
 			console.log(this.date)
 		},
-		onLoad() {
-	
-		},
 		methods:{
 			setAnniversary:function(){
 				const len = this.date.length;

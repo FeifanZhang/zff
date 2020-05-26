@@ -13,11 +13,11 @@
 </template>
 
 <script>
-//import {mapState} from "vuex";
-import axios from "axios"
+//封装request模块
+import {loginRequest} from "../request";
 	export default {
 		name: 'Login',
-		data: function() {
+		data() {
 			return {
 				yourbirth: "",
 				birthy: "19960115",
@@ -32,17 +32,12 @@ import axios from "axios"
 	
 		},
 		methods: {
-			login:function(){
+			login(){
 				if (this.yourbirth != this.birthy){
 					this.popMsg = "啥？咋连自己的生日也忘啦？";
 					this.showPop = true;
 				}else{
-					axios({
-						url: 'http://127.0.0.1:8000/api/login/confirmAuth/',
-						method:'post',
-						header:{
-							"Content-Type": "application/json"
-						},
+					loginRequest({
 						data: {
 							"username": this.yourbirth,
 							"password": this.mybirth,
@@ -51,7 +46,6 @@ import axios from "axios"
 						console.log(res.status);
 						if (res.status == 200){
 							this.$router.replace({path: '/homepage', query: {token: res.data.token}})
-							//this.$router.replace("/homepage/"+res.data.token);
 						}
 					}).catch(res => {
 						console.log(res);

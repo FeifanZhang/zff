@@ -8,3 +8,9 @@ class WordSerializers(serializers.Serializer):
     owner = serializers.CharField()
     date_created = serializers.DateTimeField()
     word = serializers.CharField()
+
+class PhotoSerializers(serializers.Serializer):
+    id = serializers.IntegerField()
+    info = serializers.CharField()
+    date_created = serializers.DateTimeField()
+    src = serializers.CharField()

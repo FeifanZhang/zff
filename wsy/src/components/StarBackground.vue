@@ -18,7 +18,6 @@
 		mounted(){
 			var _this = this;
 			var starArr = _this.$refs.stars;
-			console.log(starArr);
 			starArr.forEach(item => {
 				var speed = 0.2 + (Math.random() * 1);
 				var thisDist = _this.dist + (Math.random() * 300);

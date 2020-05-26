@@ -1,13 +1,13 @@
 <template>
-	<keep-alive>
+
 		<div class="Nav">
 			<div class="NavButtons">
 				<h1>HomePage</h1>
-				<div><input type="submit" name="" value="照    片" @click="toPhoto"></div>
-				<div><input type="submit" name="" value="纪念日" @click="toAnn"></div>
-				<div><input type="submit" name="" value="计    时" @click="toClock"></div>
-				<div><input type="submit" name="" value="想说的话" @click="toWords"></div>
-				<div><input type="button" name="" value="返    回" @click="returnToLogin"/></div>	
+				<div><router-link :to="{ path: '/homepage/photos', query: { token: this.$route.query.token } }" tag="button" class="submit" replace>照    片</router-link></div>
+				<div><router-link :to="{ path: '/homepage/anniversary', query: { token: this.$route.query.token } }" tag="button" class="submit" replace>纪念日</router-link></div>
+				<div><router-link :to="{ path: '/homepage/clock', query: { token: this.$route.query.token } }" tag="button" class="submit" replace>计    时</router-link></div>
+				<div><router-link :to="{ path: '/homepage/words', query: { token: this.$route.query.token } }" tag="button" class="submit" replace>想说的话</router-link></div>
+				<div><input type="button" name="" value="返    回" @click="returnToLogin"/></div>
 			</div>
 			<div class="ShowTimes">
 				<div class="ShowTheTime">
@@ -21,52 +21,41 @@
 					<h1>{{this.piggyTime.format("HH:mm")}}</h1>
 				</div>
 			</div>
-			<keep-alive>
 				<div class="ShowSubPage">
-					<Photos v-show="this.subPageStatus==0"></Photos>
-					<Anniversary v-show="this.subPageStatus==1"></Anniversary>
-					<Clock v-show="this.subPageStatus==2"></Clock>
-					<Words v-show="this.subPageStatus==3"></Words>
+					<keep-alive>
+<!--					<transition name='fade'>-->
+						<router-view></router-view>
+<!--					</transition>-->
+					</keep-alive>
 				</div>
-			</keep-alive>
 		</div>
-	</keep-alive> 
+
 </template>
 
 <script>
-import Photos from './Photos.vue';
-import Anniversary from './Anniversary.vue';
-import Clock from './Clock.vue'
-import Words from './Words.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter);
 let moment = require('moment-timezone');
 moment.locale('zh-cn');
 	export default {
 		name: 'Heart',
 		data() {
 			return {
-				showPop: false, 
-				subPageStatus: 2,
+				showPop: false,
 				myTime:moment(),
 				piggyTime:moment(),
 				dayNameMapping:['星期一','星期二','星期三','星期四','星期五','星期六','星期日']
 			}
 		},
-		components: {
-			Photos,
-			Clock,
-			Anniversary,
-			Words,
-		},
 		created() {
-			this.setClock();
-			setInterval(()=>{this.setClock()}, 10000)
-		},
-		computed:{
-			token(){
-				// $route所拿到的路由是目前正活跃的路由
-				// $router是获取路由列表内所有的路由
-				// params.后面跟的参数要和router.js 设置的路由参数一样
-				return this.$route.query.token
+			if (this.$route.query.token === undefined){
+				this.$router.replace('/login');
+			}else{
+				this.setClock();
+				setInterval(()=>{this.setClock()}, 10000);
+				this.$router.replace({ path: '/homepage/clock', query: { token: this.$route.query.token } });
+				console.log(this.$route.query.token);
 			}
 		},
 		methods:{
@@ -76,25 +65,19 @@ moment.locale('zh-cn');
 			},
 			returnToLogin:function(){
 				this.$router.replace('/login');
-				this.toClock();
 			},
-			toPhoto:function(){
-				this.subPageStatus = 0
-			},
-			toAnn:function(){
-				this.subPageStatus = 1
-			},
-			toClock:function(){
-				this.subPageStatus = 2
-			},
-			toWords:function(){
-				this.subPageStatus = 3
-			}
 		}
 	}
 </script>
 
 <style>
+	/*!* 为对应的路由跳转时设置动画效果 *!*/
+	/*.fade-enter-active, .fade-leave-active {*/
+	/*	transition: opacity .5s*/
+	/*}*/
+	/*.fade-enter, .fade-leave-to {*/
+	/*	opacity: 0*/
+	/*}*/
 	.Nav{
 		width: 100vw;
 		height: 100vh;
@@ -120,7 +103,7 @@ moment.locale('zh-cn');
 		padding-bottom: 5vh;
 		color: #FFF7F8;
 	}
-	.Nav input[type = "submit"]{
+	.NavButtons .submit{
 		margin-top: -2px;
 		padding-top: 5vh;
 		padding-bottom: 5vh;
@@ -143,12 +126,13 @@ moment.locale('zh-cn');
 		border: none;
 		transition: 0.25s;
 	}
-	.NavButtons input[type = "submit"]:hover{
+	.NavButtons .submit:hover{
 		/*background: #FFFFFFFF;*/
 		background: rgba(0,0,0,0.4);
 	}
-	.NavButtons input[type = "submit"]:focus{
+	.NavButtons .submit:focus{
 		background-color: rgba(0,0,0, 0.8);
+		border-color: rgba(0,0,0, 0.8);
 	}
 	.NavButtons input[type = "button"]:hover{
 		color: #000000;

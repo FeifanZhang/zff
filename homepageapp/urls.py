@@ -4,4 +4,5 @@ urlpatterns = [
     # 子路由分发
     path('words/', views.WordView.as_view()),
     path('photos/', views.PhotoView.as_view()),
+    path('photosbackup/', views.PhotoBackupView.as_view()),
 ]
