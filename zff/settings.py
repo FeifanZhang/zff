@@ -125,10 +125,13 @@ STATIC_URL = '/static/'
 # Application definition
 AUTH_USER_MODEL = 'loginapp.Users'
 
-# 媒体文件
+# 媒体文件即项目的根目录
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname('__file__')))
 
+# media的文件路径：根目录下的media文件夹
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+
+# django前端模板会通过这个'MEDIA_URL'拼接ImageField存储的图片文件名来访问图片
 MEDIA_URL = '/media/'
 
 REST_FRAMEWORK = {

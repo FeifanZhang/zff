@@ -2,11 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import router from './router.js'
 
 // 将vuex注册进入vue内
 Vue.use(Vuex);
+Vue.use(ElementUI);
 Vue.prototype.axios = axios;
-import router from './router.js'
 Vue.config.productionTip = false;
 // const store = new Vuex.Store({
 // 	// state用来声明变量并初始化
