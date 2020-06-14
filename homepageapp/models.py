@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 class WordManager(models.Manager):
     def show(self, *args, **kwargs):
-        return Word.objects.filter(is_delete=False)
+        return Word.objects.filter(is_delete=False, owner=kwargs['owner'])
 
     def insert(self, *args, **kwargs):
         if not Word.objects.filter(word=kwargs['word']):
@@ -15,11 +15,10 @@ class WordManager(models.Manager):
             raise ValueError({'error': 'this word has been exist'})
 
 
-
 class Word(models.Model):
-    # owner = (('wsy', "魏疏影"), ('zff', "张非凡"))
+    owner = models.CharField(choices=(('wsy', "魏疏影"), ('zff', "张非凡")), default='wsy', max_length=128)
     # True: wsy; False: zff
-    owner = models.BooleanField("owner", default=True)
+    # owner = models.BooleanField("owner", default=True)
     date_created = models.DateTimeField("date_created", auto_now_add=timezone.now)
     word = models.CharField("word", max_length=256, default="什么都没写吗？", null=False)
     is_delete = models.BooleanField("is_delete", default=False)

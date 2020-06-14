@@ -2,7 +2,7 @@
 	<div class="Clock">
 		<h2>在一起已经：</h2>
 		<div class="Time">
-			<div id="day"><span>{{this.days}}</span><span>天</span></div>
+			<div id="day"><span >{{this.days}}</span><span>天</span></div>
 			<div id="hour"><span >{{this.hours}}</span><span>小时</span></div>
 			<div id="min"><span >{{this.mins}}</span><span>分钟</span></div>
 		</div>
@@ -35,29 +35,57 @@ moment.locale('zh-cn');
 	}
 </script>
 <style>
+	@media screen and (orientation:portrait){
+
+		.Clock .Time div:last-child span{
+			display: none;
+		}
+
+
+		.Clock .Time #hour{
+			display: none;
+		}
+
+		.Clock .Time div:first-child span{
+			width: 96%!important;
+		}
+
+		.Time div{
+			width: 90%!important;
+		}
+
+		.Clock .Time{
+			margin-left: 0;
+		}
+	}
+
 	.Clock{
-		margin-right: 10vw;
+		text-align: center;
+		height: 100%;
+		width: 100%;
 	}
 	.Clock>h2{
+		color: #FFF1F0;
 		text-align: center;
 		font-weight: 800;
-		font-size: 2em;
-		letter-spacing: 0.8em;
-		margin-bottom: 2vh;
+		font-size: 5vh;
+		letter-spacing: 1vw;
+		margin-bottom: 5vh;
 	}
 	.Time{
-		margin-left: 5vw;
+		height: 100%;
+		width: 100%;
+
 	}
 	.Time>div{
 		float: left;
-		margin-right: 2vw;
+		margin-left: 5%;
+		width: 25%;
 		position: relative;
 		-webkit-box-reflect: below 1px linear-gradient(transparent,#0004);
 	}
 	.Time>div>span{
-		/*display: block;*/
-		width: 15vw;
-		height: 25vh;
+		width: 16.7vw;
 		background-color: rgba(33, 150, 243, .4);
 		color: #fff;
 		display: flex;

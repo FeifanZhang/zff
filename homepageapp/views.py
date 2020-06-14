@@ -30,8 +30,9 @@ class WordView(APIView):
     # get word
     def get(self, request, *args, **kwargs):
         try:
-            words = Word.objects.show()
-            ret = JsonResponse({'words': WordSerializers(instance=words, many=True).data}, safe=False)
+            wsywords = Word.objects.show(owner='wsy')
+            zffwords = Word.objects.show(owner='zff')
+            ret = JsonResponse({'wsywords': WordSerializers(instance=wsywords, many=True).data, 'zffwords': WordSerializers(instance=zffwords, many=True).data}, safe=False)
         except Exception as e:
             ret = JsonResponse({"error": e.args}, status=404)
             print(e)

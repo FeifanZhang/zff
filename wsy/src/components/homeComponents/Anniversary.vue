@@ -1,11 +1,26 @@
 <template>
 	<div class="ShowAnn">
-		<table>
-			<tr v-for="(value, index) in date" :key="index">
-				<td ><h2>{{value[0].format("YYYY-MM-DD")}}</h2></td>
-				<td align="left"><h2>{{value[1]}}</h2></td>
-			</tr>
-		</table>
+		<el-table
+				:data="this.date"
+				style="width: 100%"
+				height="100%"
+		>
+			<el-table-column
+					prop="time"
+					label="日期"
+					width="180">
+			</el-table-column>
+			<el-table-column
+					prop="info"
+					label="纪念日"
+					width="180">
+			</el-table-column>
+			<el-table-column
+					prop="countdown"
+					label="倒计时"
+					width="180">
+			</el-table-column>
+		</el-table>
 	</div>
 </template>
 
@@ -16,19 +31,36 @@ moment.locale('zh-cn');
 		name: 'Clock',
 		data() {
 			return {
-				date:[
-						[moment("2018-02-26"), "第1次见面"],
-						[moment("2018-03-04"), "在一起第1天"],
-						[moment("2018-03-29"),"张张第1个生日"],
-						[moment("2018-03-04").add(100, "days"), "在一起100天纪念日"],
-						[moment("2019-01-15"), "小猪的第1个生日"],
-						[moment("2019-12-31"),"第1次跨年"],	
-				]
+				date:[{
+					time:moment("2018-02-26"),
+					info:"第1次见面",
+					countdown:"check!"
+				}, {
+					time:moment("2018-03-04"),
+					info:"在一起第1天",
+					countdown:"check!",
+				}, {
+					time:moment("2018-03-29"),
+					info:"张张第1个生日",
+					countdown:"check!",
+				}, {
+					time:moment("2018-03-04").add(100, "days"),
+					info:"在一起100天纪念日",
+					countdown:"check!",
+				}, {
+					time:moment("2019-01-15"),
+					info:"小猪的第1个生日",
+					countdown:"check!",
+				}, {
+					time:moment("2019-12-31"),
+					info:"第1次跨年",
+					countdown:"check!",
+				},]
 			}
 		},
 		created() {
 			this.setAnniversary();
-			console.log(this.date)
+			// console.log(this.date)
 		},
 		methods:{
 			setAnniversary:function(){
@@ -36,44 +68,85 @@ moment.locale('zh-cn');
 				for (let v=1; v<10; v++){
 					for (let i=0; i<len; i++){
 						if(i == 0){
-							this.date.push(
-								[moment("2018-02-26").add(v, "years"), "第1次见面"+v+"年"], 
+							let time = moment("2018-02-26").add(v, "years");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"第1次见面"+v+"年",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}else if(i == 1){
-							this.date.push(
-								[moment("2018-03-04").add(v, "years"), "在一起第"+(v+1)+"年"], 
+							let time = moment("2018-03-04").add(v, "years");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"在一起第"+(v+1)+"年",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}else if(i == 2){
-							this.date.push(
-								[moment("2018-03-29").add(v, "years"), "张张第"+(v+1)+"生日"], 
+							let time = moment("2018-03-29").add(v, "years");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"张张第"+(v+1)+"生日",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}else if(i == 3){
-							this.date.push(
-								[moment("2018-03-04").add((v+1)*100, "days"), "在一起"+(v+1)*100+"天纪念日"], 
+							let time = moment("2018-03-04").add((v+1)*100, "days");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"在一起"+(v+1)*100+"天纪念日",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}else if(i == 4){
-							this.date.push(
-								[moment("2019-01-15").add(v,"years"), "小猪的第"+(v+1)+"生日"],
+							let time = moment("2018-01-15").add(v, "years");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"小猪的第"+(v+1)+"生日",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}else{
-							this.date.push(
-								[moment("2019-12-31").add(v,"years"), "第"+(v+1)+"次跨年"],
+							let time = moment("2018-12-31").add(v, "years");
+							let countdown = time.diff( moment().tz("Asia/Shanghai"), "days");
+							this.date.push({
+								time:time,
+								info:"第"+(v+1)+"次跨年",
+								countdown: countdown>0 ? "还有"+countdown+"天！": "check!"},
 							);
 						}
 					}
 				}
-				this.date.sort(function(a,b){return a[0].diff(b[0], "days")})
+				this.date.sort(function(a,b){return a.time.diff(b.time, "days")});
+				this.date.forEach(element=>{
+					element.time = element.time.format("YYYY-MM-DD")
+				})
 			},
 		},
 	}
 </script>
 <style>
 	.ShowAnn{
-		width: 100vw;
-		height: 60vh;
+		width: 100%;
+		height: 80vh;
 		overflow: auto;
 	}
-	.ShowAnn>table{
-		width: 100%;
+
+	/*与下面的 .el-table结合使得表格头部和身体透明*/
+	.el-table th, .el-table tr {
+		background-color: transparent;
 	}
+
+	.el-table__body, .el-table__header {
+		width: 100% !important;
+		opacity: 0.7;
+	}
+	.el-table{
+		background-color: transparent;
+		color: #000000;
+		font-size: larger;
+		font-weight: 700;
+	}
+
 </style>
